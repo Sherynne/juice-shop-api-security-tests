@@ -1,0 +1,35 @@
+name: Security tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    services:
+      juice-shop:
+        image: bkimminich/juice-shop
+        ports:
+          - 3000:3000
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: npm install
+      - name: Wait for Juice Shop
+        run: |
+          for i in $(seq 1 40); do
+            curl -sf http://localhost:3000/rest/admin/application-version && exit 0
+            sleep 3
+          done
+          echo "Juice Shop did not start" && exit 1
+      - run: npx playwright test
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 14

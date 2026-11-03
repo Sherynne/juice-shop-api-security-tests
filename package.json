@@ -1,0 +1,12 @@
+{
+  "name": "juice-shop-security-tests",
+  "version": "1.0.0",
+  "description": "Automated API security and business logic tests for OWASP Juice Shop, written with Playwright (JavaScript)",
+  "scripts": {
+    "test": "playwright test",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.48.0"
+  }
+}
